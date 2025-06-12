@@ -1,5 +1,6 @@
 package jacobkingdev.teaching.todo.ui.navigation
 
+import jacobkingdev.teaching.todo.domain.model.Task
 import kotlinx.serialization.Serializable
 import kotlin.reflect.KClass
 
@@ -10,7 +11,7 @@ object ToDoNavDestination {
     data object List
 
     @Serializable
-    data class Details(val todoItemId: Int)
+    data class Details(val task: Task)
 
     fun resolveTitle(rawRoute: String): String {
 
