@@ -2,9 +2,6 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
-    alias(libs.plugins.kotlin.serialization)
-    alias(libs.plugins.kotlin.ksp)
-    alias(libs.plugins.hilt)
 }
 
 android {
@@ -49,14 +46,6 @@ dependencies {
     implementation(libs.androidx.ui.graphics)
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material3)
-    implementation(libs.androidx.compose.navigation)
-    implementation(libs.kotlinx.serializable)
-    implementation(libs.kotlinx.datetime)
-    implementation(libs.hilt.runtime)
-    implementation(libs.hilt.navigation.compose)
-
-    ksp(libs.hilt.compiler)
-    ksp(libs.hilt.compiler.androidx)
 
     testImplementation(libs.junit)
 

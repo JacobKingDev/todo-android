@@ -1,4 +1,4 @@
-package jacobkingdev.teaching.todo.ui.theme
+package jacobkingdev.teaching.todo.theme
 
 import androidx.compose.ui.graphics.Color
 
