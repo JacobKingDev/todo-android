@@ -1,9 +1,5 @@
 package jacobkingdev.teaching.todo
 
-import android.annotation.SuppressLint
-import android.content.Context
-import android.content.SharedPreferences
-import androidx.activity.compose.LocalActivity
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -11,10 +7,13 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Delete
@@ -24,7 +23,6 @@ import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.SwipeToDismissBox
 import androidx.compose.material3.SwipeToDismissBoxValue
-import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.rememberSwipeToDismissBoxState
 import androidx.compose.runtime.Composable
@@ -39,11 +37,12 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import jacobkingdev.teaching.todo.theme.ToDoTheme
 
-@SuppressLint("ViewModelConstructorInComposable")
 @Preview
 @Composable
 private fun Preview() {
@@ -63,13 +62,16 @@ fun TaskListView(
     Box(
         contentAlignment = Alignment.BottomEnd,
         content = {
+
             var tasks by remember { mutableStateOf(listOf<Task>()) }
 
             LazyColumn(
                 contentPadding = PaddingValues(16.dp),
                 verticalArrangement = Arrangement.spacedBy(16.dp),
                 content = {
+
                     items(tasks, key = { it.id }) { task ->
+
                         TaskCard(
                             task = task,
                             onTextChanged = { newValue ->
@@ -83,11 +85,14 @@ fun TaskListView(
                                 }
                             }
                         )
+
                     }
+
                 },
                 modifier = Modifier
                     .fillMaxSize()
             )
+
             FloatingActionButton(
                 content = {
                     Icon(
@@ -108,8 +113,8 @@ fun TaskListView(
             )
         },
         modifier = modifier
+            .imePadding()
     )
-
 }
 
 @Composable
@@ -126,9 +131,11 @@ private fun TaskCard(
     if (swipeToDismissBoxState.currentValue == SwipeToDismissBoxValue.EndToStart && swipeToDismissBoxState.progress == 1F) {
         onRemove()
     }
+
     SwipeToDismissBox(
         state = swipeToDismissBoxState,
         backgroundContent = {
+
             if (swipeToDismissBoxState.dismissDirection == SwipeToDismissBoxValue.EndToStart) {
                 Box(
                     contentAlignment = Alignment.CenterEnd,
@@ -147,19 +154,31 @@ private fun TaskCard(
                         .background(Color.Red)
                 )
             }
+
         },
         content = {
+
             Card(
                 content = {
                     Column(
                         content = {
+
                             val focusRequester = remember { FocusRequester() }
+                            val focusManager = LocalFocusManager.current
+
                             LaunchedEffect(Unit) {
                                 focusRequester.requestFocus()
                             }
                             TextField(
                                 value = task.description,
                                 onValueChange = onTextChanged,
+                                keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
+                                keyboardActions = KeyboardActions(
+                                    onDone = {
+                                        focusManager.clearFocus()
+                                    }
+                                ),
+
                                 modifier = Modifier
                                     .fillMaxWidth()
                                     .focusRequester(focusRequester)
@@ -170,7 +189,7 @@ private fun TaskCard(
                     )
                 }
             )
+
         }
     )
-
 }
